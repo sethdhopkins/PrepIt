@@ -51,7 +51,7 @@ public class MealsController : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Add(meal);
+            _context.Meal.Add(meal);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
