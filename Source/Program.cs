@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Source.Services;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("SourceContext") ?? throw new InvalidOperationException("Connection string 'SourceContext' not found.");
 
@@ -7,6 +8,7 @@ builder.Services.AddDbContext<SourceContext>(options => options.UseSqlServer(con
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient<IRecipeService, RecipeService>(client => client.BaseAddress = new Uri("https://www.themealdb.com/api/json/v1/1/"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

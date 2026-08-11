@@ -7,7 +7,7 @@ namespace Source.Models
         public int Id { get; set; }
         public int Quantity { get; set; }
         public string? Unit { get; set; }
-        public string? DateAdded { get; set; }
+        public DateTime TimeAdded { get; set; } = DateTime.Now;
         public required string Name { get; set; }
         public required int InventoryId { get; set; }
         public int ApiId { get; set; }

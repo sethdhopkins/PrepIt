@@ -224,3 +224,5 @@ C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\Source.pdb
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\Source.genruntimeconfig.cache
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\ref\Source.dll
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
+C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\compressed\7vtkj46kfl-{0}-6cdlsgpy3y-6cdlsgpy3y.gz
+C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\compressed\gqmbbydpey-{0}-a62otzx8an-a62otzx8an.gz
