@@ -61,6 +61,8 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\data\BreakfastPotatoes.json
+wwwroot\data\MealswithFirstLetterA.json
 C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\css\site.css
 C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\favicon.ico
 C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\js\site.js
@@ -123,3 +125,5 @@ C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\lib\jquery\dist\jquery.slim.js
 C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\lib\jquery\dist\jquery.slim.min.js
 C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\lib\jquery\dist\jquery.slim.min.map
 C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\data\BreakfastPotatoes.json
+C:\Users\sethd\source\repos\PrepIt\Source\wwwroot\data\MealswithFirstLetterA.json
