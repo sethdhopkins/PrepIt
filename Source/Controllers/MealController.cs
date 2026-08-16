@@ -1,13 +1,13 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Source.Models;
+using Source.Models.MealPlanning;
 
-public class MealsController : Controller
+public class MealController : Controller
 {
     private readonly SourceContext _context;
 
-    public MealsController(SourceContext context)
+    public MealController(SourceContext context)
     {
         _context = context;
     }
@@ -47,7 +47,7 @@ public class MealsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Date,Type,Cooked,ApiId,MealPlanId")] Meal meal)
+    public async Task<IActionResult> Create([Bind("Id,Date,Type,Cooked,RecipeId,MealPlanId")] Meal meal)
     {
         if (ModelState.IsValid)
         {
@@ -79,7 +79,7 @@ public class MealsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Date,Type,Cooked,ApiId,MealPlanId")] Meal meal)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Date,Type,Cooked,RecipeId,MealPlanId")] Meal meal)
     {
         if (id != meal.Id)
         {
