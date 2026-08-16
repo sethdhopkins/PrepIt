@@ -1,9 +1,94 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model IEnumerable<Source.Models.Recipes.SavedRecipe>
 @{
+    ViewData["Title"] = "Saved Recipes";
 }
 
-<h1>
-    Hello favorites!
-</h1>
+<div class="container text-center">
+
+    <h1 class="mb-4">Saved Recipes</h1>
+
+    @if (Model.Any())
+    {
+        <form method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 mt-2">
+
+                @foreach (var recipe in Model)
+                {
+                    <div class="col">
+
+                        <div class="card h-100">
+
+                            <div class="card-body">
+
+                                <h3 class="card-title">
+                                    @recipe.Recipe.Name
+                                </h3>
+
+                                <div class="position-relative d-inline-block">
+
+                                    <img src="@recipe.Recipe.Image"
+                                         alt="@recipe.Recipe.Name"
+                                         class="img-fluid rounded"
+                                         style="max-width: 200px;" />
+
+                                    <!-- Checkbox overlay -->
+                                    <div class="position-absolute top-0 end-0 p-2">
+                                        <div class="form-check bg-white bg-opacity-75 rounded px-2 py-1 shadow-sm">
+
+                                            <label class="form-check-label visually-hidden"
+                                                   for="recipe-@recipe.RecipeId">
+                                                Select Recipe
+                                            </label>
+
+                                            <input class="form-check-input m-0"
+                                                   type="checkbox"
+                                                   name="selectedSavedRecipeIds"
+                                                   value="@recipe.Id"
+                                                   id="recipe-@recipe.Id" />
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <p class="mt-2">
+                                    <strong>Category:</strong> @recipe.Recipe.Category
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+            <div class="fixed-bottom bg-light border-top shadow p-3 text-center">
+                <button class="btn btn-success px-5"
+                        type="submit"
+                        asp-action="AddToQueue">
+                    Add to Meal Plan
+                </button>
+
+                <button class="btn btn-danger px-5"
+                        type="submit"
+                        asp-action="Delete">
+                    Delete
+                </button>
+            </div>
+
+        </form>
+    }
+    else
+    {
+        <p>No recipes found.</p>
+    }
+</div>
+
