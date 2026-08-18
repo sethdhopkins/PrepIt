@@ -1,0 +1,20 @@
+{
+  "region": "us-east-2",
+  "configuration": "Debug",
+  "framework": "net10.0",
+  "self-contained": false,
+  "application": "PrepItDemo",
+  "environment": "PrepItDemo-dev",
+  "app-path": "/",
+  "iis-website": "Default Web Site",
+  "enable-xray": false,
+  "enhanced-health-type": "basic",
+  "additional-options": "\u0022aws:autoscaling:launchconfiguration,SecurityGroups\u0022=\u0022sg-0b1dac709d1aff51e\u0022;\u0022aws:ec2:vpc,Subnets\u0022=\u0022subnet-012dc83326f4bd978\u0022",
+  "solution-stack": "64bit Windows Server 2019 v2.23.3 running IIS 10.0",
+  "environment-type": "SingleInstance",
+  "cname": "prepitdemo-dev",
+  "instance-type": "t3.micro",
+  "key-pair": "",
+  "instance-profile": "aws-elasticbeanstalk-ec2-role",
+  "service-role": "aws-elasticbeanstalk-service-role"
+}
