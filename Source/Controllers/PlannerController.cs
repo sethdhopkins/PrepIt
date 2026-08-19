@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Source.Models.MealPlanning;
+using Source.Models.Recipes;
 using Source.Models.Users;
 using Source.Services;
 
@@ -24,23 +25,18 @@ namespace Source.Controllers
 
             const int pageSize = 6;
 
-            var queue = await _context.RecipeQueue
-                .Include(q => q.RecipeQueueItems)
-                    .ThenInclude(i => i.Recipe)
-                .FirstOrDefaultAsync(q => q.UserId == userId);
+            var queueItems = await _mealPlanService.GetQueueItemsAsync(userId);
 
-            if (queue == null)
+            if (queueItems == null || !queueItems.Any())
             {
                 return NotFound();
             }
 
-            var totalCount = queue.RecipeQueueItems.Count();
+            var totalCount = queueItems.Count();
 
-            var recipes = queue.RecipeQueueItems
-                .OrderBy(x => x.TimeAdded)
+            var recipes = queueItems
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(x => x.Recipe)
                 .ToList();
 
             var model = new RecipeQueueViewModel
