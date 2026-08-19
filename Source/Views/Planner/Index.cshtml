@@ -7,10 +7,21 @@
 
 <div class="container text-center">
 
-    <h1 class="mb-4">&lt;This Week&gt;</h1>
+    <div class="calendar-header">
+        <button type="button" class="week-nav" onclick="previousWeek()">
+            &lt;
+        </button>
+
+        <span id="weekLabel">August 17 – August 23, 2026</span>
+
+        <button type="button" class="week-nav" onclick="nextWeek()">
+            &gt;
+        </button>
+    </div>
 
     @if (Model.Recipes.Any())
     {
+        //Queued recipes at bottom of page
         <div class="fixed-bottom bg-light border-top shadow recipe-planner-footer">
 
             <div class="container-fluid px-3 py-3">
@@ -26,13 +37,13 @@
                                 <div class="card-body text-center">
 
                                     <h5 class="card-title">
-                                        @recipe.Recipe.Name
+                                        @recipe.Name
                                     </h5>
 
                                     <div class="position-relative d-inline-block">
 
-                                        <img src="@recipe.Recipe.Image"
-                                             alt="@recipe.Recipe.Name"
+                                        <img src="@recipe.Image"
+                                             alt="@recipe.Name"
                                              class="img-fluid rounded"
                                              style="max-width: 125px;" />
 
@@ -41,8 +52,8 @@
                                                 style="width: 40px; height: 40px;"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#dateModal"
-                                                data-recipe-id="@recipe.RecipeId"
-                                                data-recipe-name="@recipe.Recipe.Name">
+                                                data-recipe-id="@recipe.Id"
+                                                data-recipe-name="@recipe.Name">
                                             <strong>+</strong>
                                         </button>
 
@@ -107,7 +118,6 @@
         </div>
     }
 </div>
-
 <div class="modal fade" id="dateModal" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
 
     <div class="modal-dialog modal-dialog-centered">

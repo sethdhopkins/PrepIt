@@ -14,7 +14,7 @@ namespace Source.Models.MealPlanning
         }
         public int Id { get; set; }
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public MealType Type { get; set; }
         public bool Cooked { get; set; } = false;
         public int RecipeId { get; set; }

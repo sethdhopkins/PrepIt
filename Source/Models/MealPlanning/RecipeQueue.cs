@@ -1,13 +1,12 @@
-﻿using Source.Models.Recipes;
+﻿using Source.Models.Users;
 
 namespace Source.Models.MealPlanning
 {
     public class RecipeQueue
     {
         public int Id { get; set; }
-        public int RecipeId { get; set; }
-        public Recipe Recipe { get; set; } = null!;
-        public DateTime TimeAdded { get; set; } = DateTime.Now;
+        public ICollection<RecipeQueueItem> RecipeQueueItems { get; set; } = [];
         public required int UserId { get; set; }
+        public User User { get; set; } = null!;
     }
 }

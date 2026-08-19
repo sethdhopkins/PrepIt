@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Source.Migrations
 {
     [DbContext(typeof(SourceContext))]
-    partial class SourceContextModelSnapshot : ModelSnapshot
+    [Migration("20260819153926_DateOnly_types_for_Meal")]
+    partial class DateOnly_types_for_Meal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,41 +218,22 @@ namespace Source.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("RecipeQueue");
-                });
-
-            modelBuilder.Entity("Source.Models.MealPlanning.RecipeQueueItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipeQueueId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("TimeAdded")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RecipeId");
 
-                    b.HasIndex("RecipeQueueId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("RecipeQueueItems");
+                    b.ToTable("RecipeQueue");
                 });
 
             modelBuilder.Entity("Source.Models.Recipes.Recipe", b =>
@@ -462,32 +446,19 @@ namespace Source.Migrations
 
             modelBuilder.Entity("Source.Models.MealPlanning.RecipeQueue", b =>
                 {
-                    b.HasOne("Source.Models.Users.User", "User")
-                        .WithOne("RecipeQueue")
-                        .HasForeignKey("Source.Models.MealPlanning.RecipeQueue", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Source.Models.MealPlanning.RecipeQueueItem", b =>
-                {
                     b.HasOne("Source.Models.Recipes.Recipe", "Recipe")
-                        .WithMany("RecipeQueueItems")
+                        .WithMany()
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Source.Models.MealPlanning.RecipeQueue", "RecipeQueue")
-                        .WithMany("RecipeQueueItems")
-                        .HasForeignKey("RecipeQueueId")
+                    b.HasOne("Source.Models.Users.User", null)
+                        .WithMany("RecipeQueue")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Recipe");
-
-                    b.Navigation("RecipeQueue");
                 });
 
             modelBuilder.Entity("Source.Models.Recipes.RecipeIngredient", b =>
@@ -550,18 +521,11 @@ namespace Source.Migrations
                     b.Navigation("Meals");
                 });
 
-            modelBuilder.Entity("Source.Models.MealPlanning.RecipeQueue", b =>
-                {
-                    b.Navigation("RecipeQueueItems");
-                });
-
             modelBuilder.Entity("Source.Models.Recipes.Recipe", b =>
                 {
                     b.Navigation("Meals");
 
                     b.Navigation("RecipeIngredients");
-
-                    b.Navigation("RecipeQueueItems");
                 });
 
             modelBuilder.Entity("Source.Models.Users.User", b =>
@@ -570,8 +534,7 @@ namespace Source.Migrations
 
                     b.Navigation("MealPlans");
 
-                    b.Navigation("RecipeQueue")
-                        .IsRequired();
+                    b.Navigation("RecipeQueue");
 
                     b.Navigation("SavedRecipes");
                 });

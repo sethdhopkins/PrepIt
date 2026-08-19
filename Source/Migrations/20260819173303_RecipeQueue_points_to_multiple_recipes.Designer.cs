@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Source.Migrations
 {
     [DbContext(typeof(SourceContext))]
-    partial class SourceContextModelSnapshot : ModelSnapshot
+    [Migration("20260819173303_RecipeQueue_points_to_multiple_recipes")]
+    partial class RecipeQueue_points_to_multiple_recipes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,6 +218,9 @@ namespace Source.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("TimeAdded")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -224,32 +230,6 @@ namespace Source.Migrations
                         .IsUnique();
 
                     b.ToTable("RecipeQueue");
-                });
-
-            modelBuilder.Entity("Source.Models.MealPlanning.RecipeQueueItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipeQueueId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeAdded")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("RecipeQueueId");
-
-                    b.ToTable("RecipeQueueItems");
                 });
 
             modelBuilder.Entity("Source.Models.Recipes.Recipe", b =>
@@ -279,10 +259,15 @@ namespace Source.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RecipeQueueId")
+                        .HasColumnType("int");
+
                     b.Property<string>("YoutubeUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RecipeQueueId");
 
                     b.ToTable("Recipe");
                 });
@@ -471,23 +456,11 @@ namespace Source.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Source.Models.MealPlanning.RecipeQueueItem", b =>
+            modelBuilder.Entity("Source.Models.Recipes.Recipe", b =>
                 {
-                    b.HasOne("Source.Models.Recipes.Recipe", "Recipe")
-                        .WithMany("RecipeQueueItems")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Source.Models.MealPlanning.RecipeQueue", "RecipeQueue")
-                        .WithMany("RecipeQueueItems")
-                        .HasForeignKey("RecipeQueueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipe");
-
-                    b.Navigation("RecipeQueue");
+                    b.HasOne("Source.Models.MealPlanning.RecipeQueue", null)
+                        .WithMany("Recipes")
+                        .HasForeignKey("RecipeQueueId");
                 });
 
             modelBuilder.Entity("Source.Models.Recipes.RecipeIngredient", b =>
@@ -552,7 +525,7 @@ namespace Source.Migrations
 
             modelBuilder.Entity("Source.Models.MealPlanning.RecipeQueue", b =>
                 {
-                    b.Navigation("RecipeQueueItems");
+                    b.Navigation("Recipes");
                 });
 
             modelBuilder.Entity("Source.Models.Recipes.Recipe", b =>
@@ -560,8 +533,6 @@ namespace Source.Migrations
                     b.Navigation("Meals");
 
                     b.Navigation("RecipeIngredients");
-
-                    b.Navigation("RecipeQueueItems");
                 });
 
             modelBuilder.Entity("Source.Models.Users.User", b =>
