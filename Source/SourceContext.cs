@@ -11,6 +11,7 @@ public class SourceContext(DbContextOptions<SourceContext> options) : DbContext(
     public DbSet<Meal> Meal { get; set; } = default!;
     public DbSet<MealPlan> MealPlan { get; set; } = default!;
     public DbSet<RecipeQueue> RecipeQueue { get; set; } = default!;
+    public DbSet<RecipeQueueItem> RecipeQueueItems { get; set; } = default!;
 
     public DbSet<Inventory> Inventory { get; set; } = default!;
     public DbSet<InventoryItem> InventoryItem { get; set; } = default!;

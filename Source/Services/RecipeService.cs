@@ -203,7 +203,7 @@ namespace Source.Services
             return recipes?.Meals ?? new List<MealDbRecipe>();
         }
 
-        public async Task<Recipe?> CreateAPIRecipe(string recipeId)
+        public async Task<Recipe?> CreateRecipeFromMealDBAPI(string recipeId)
         {
             var dbRecipe = await _context.Recipe
                 .Include(r => r.RecipeIngredients)
@@ -285,27 +285,38 @@ namespace Source.Services
 
         public async Task ToQueueAsync(string recipeId, int userId)
         {
-            var dbRecipe = await CreateAPIRecipe(recipeId);
+            var dbRecipe = await CreateRecipeFromMealDBAPI(recipeId);
 
-            if(dbRecipe == null)
+            if (dbRecipe == null)
             {
                 return;
             }
 
-            var queueItem = new RecipeQueue
-            {
-                Recipe = dbRecipe,
-                UserId = userId
-            };
+            var queue = await _context.RecipeQueue
+                .Include(q => q.RecipeQueueItems)
+                .FirstOrDefaultAsync(q => q.UserId == userId);
 
-            _context.RecipeQueue.Add(queueItem);
+            if (queue == null)
+            {
+                queue = new RecipeQueue
+                {
+                    UserId = userId
+                };
+
+                _context.RecipeQueue.Add(queue);
+            }
+
+            queue.RecipeQueueItems.Add(new RecipeQueueItem
+            {
+                Recipe = dbRecipe
+            });
 
             await _context.SaveChangesAsync();
         }
 
         public async Task ToSavedAsync(string recipeId, int userId)
         {
-            var dbRecipe = await CreateAPIRecipe(recipeId);
+            var dbRecipe = await CreateRecipeFromMealDBAPI(recipeId);
 
             if (dbRecipe == null)
             {

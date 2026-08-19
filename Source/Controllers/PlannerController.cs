@@ -2,16 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Source.Models.MealPlanning;
 using Source.Models.Users;
+using Source.Services;
 
 namespace Source.Controllers
 {
     public class PlannerController : Controller
         {
         private readonly SourceContext _context;
+        private readonly IMealPlanService _mealPlanService;
 
-        public PlannerController(SourceContext context)
+        public PlannerController(SourceContext context, IMealPlanService mealPlanService)
         {
             _context = context;
+            _mealPlanService = mealPlanService;
         }
 
         // GET: MEALS
@@ -21,17 +24,24 @@ namespace Source.Controllers
 
             const int pageSize = 6;
 
-            var query = _context.RecipeQueue
-                .Include(x => x.Recipe)
-                .Where(x => x.UserId == userId);
+            var queue = await _context.RecipeQueue
+                .Include(q => q.RecipeQueueItems)
+                    .ThenInclude(i => i.Recipe)
+                .FirstOrDefaultAsync(q => q.UserId == userId);
 
-            var totalCount = await query.CountAsync();
+            if (queue == null)
+            {
+                return NotFound();
+            }
 
-            var recipes = await query
-                .OrderBy(x => x.Id)
+            var totalCount = queue.RecipeQueueItems.Count();
+
+            var recipes = queue.RecipeQueueItems
+                .OrderBy(x => x.TimeAdded)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .Select(x => x.Recipe)
+                .ToList();
 
             var model = new RecipeQueueViewModel
             {
@@ -45,27 +55,27 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddMeal(int recipeId, DateTime mealDate, Meal.MealType mealType)
+        public async Task<IActionResult> AddMeal(int recipeId, DateTime mealDate, Meal.MealType mealType, int userId = 1)
         {
-            var recipe = await _context.Recipe
-                .FirstOrDefaultAsync(r => r.Id == recipeId);
+            //var recipe = await _context.Recipe
+            //    .FirstOrDefaultAsync(r => r.Id == recipeId);
 
-            if (recipe == null)
-            {
-                return NotFound();
-            }
+            //if (recipe == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var meal = new Meal
-            {
-                RecipeId = recipeId,
-                Date = mealDate,
-                Type = mealType,
-                Cooked = false
-            };
+            //var meal = new Meal
+            //{
+            //    RecipeId = recipeId,
+            //    Date = mealDate,
+            //    Type = mealType,
+            //    Cooked = false
+            //};
 
-            _context.Meal.Add(meal);
+            //_context.Meal.Add(meal);
 
-            await _context.SaveChangesAsync();
+            await _mealPlanService.CreateMealAsnyc(recipeId, mealDate, mealType, userId);
 
             return RedirectToAction(nameof(Index));
         }

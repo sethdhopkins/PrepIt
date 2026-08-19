@@ -20,7 +20,7 @@ namespace Source.Models.Users
 
         public ICollection<MealPlan> MealPlans { get; set; } = [];
         public ICollection<Inventory> Inventories { get; set; } = [];
-        public ICollection<RecipeQueue> RecipeQueue { get; set; } = [];
+        public RecipeQueue RecipeQueue { get; set; } = null!;
         public ICollection<SavedRecipe> SavedRecipes { get; set; } = [];
     }
 }

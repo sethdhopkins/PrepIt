@@ -9,6 +9,9 @@ builder.Services.AddDbContext<SourceContext>(options => options.UseSqlServer(con
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<IRecipeService, RecipeService>(client => client.BaseAddress = new Uri("https://www.themealdb.com/api/json/v1/1/"));
+
+builder.Services.AddScoped<IMealPlanService, MealPlanService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

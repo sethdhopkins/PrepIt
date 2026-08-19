@@ -14,9 +14,8 @@ namespace Source.Models.Recipes
         public string? Instructions { get; set; }
         public string? Image { get; set; }
         public string? YoutubeUrl { get; set; }
-
         public ICollection<Meal> Meals { get; set; } = [];
-
         public ICollection<RecipeIngredient> RecipeIngredients { get; set; } = [];
+        public ICollection<RecipeQueueItem> RecipeQueueItems { get; set; } = [];
     }
 }
