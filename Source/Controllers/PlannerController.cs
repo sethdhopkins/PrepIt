@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Source.Models.MealPlanning;
+using Source.Models.Recipes;
 using Source.Models.Users;
 using Source.Services;
 
@@ -17,37 +18,32 @@ namespace Source.Controllers
             _mealPlanService = mealPlanService;
         }
 
-        // GET: MEALS
-        public async Task<IActionResult> Index(int page = 1, int userId = 1)
+        private DateOnly GetWeekStart(DateOnly date)
         {
-            page = Math.Max(1, page);
+            return date.AddDays(-(int)date.DayOfWeek);
+        }
 
-            const int pageSize = 6;
+        // GET: MEALS
+        public async Task<IActionResult> Index(DateOnly? weekStart, int userId = 1)
+        {
 
-            var queue = await _context.RecipeQueue
-                .Include(q => q.RecipeQueueItems)
-                    .ThenInclude(i => i.Recipe)
-                .FirstOrDefaultAsync(q => q.UserId == userId);
+            var selectedWeek = weekStart ?? GetWeekStart(DateOnly.FromDateTime(DateTime.Today));
 
-            if (queue == null)
-            {
-                return NotFound();
-            }
+            var queue = await _mealPlanService.GetQueueItemsAsync(userId);
 
-            var totalCount = queue.RecipeQueueItems.Count();
+            var queueItems = queue.ToList();
 
-            var recipes = queue.RecipeQueueItems
-                .OrderBy(x => x.TimeAdded)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .Select(x => x.Recipe)
-                .ToList();
+            var mealPlan = await _mealPlanService.GetMealPlanAsync(userId, selectedWeek);
 
             var model = new RecipeQueueViewModel
             {
-                Recipes = recipes,
-                CurrentPage = page,
-                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+                Plan = mealPlan,
+                Queue = queueItems,
+                QueueMessage = queueItems.Count == 0
+                    ? "No queued recipes."
+                    : null,
+                WeekStart = selectedWeek,
+                WeekEnd = selectedWeek.AddDays(6),
             };
 
             return View(model);
@@ -55,27 +51,9 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddMeal(int recipeId, DateTime mealDate, Meal.MealType mealType, int userId = 1)
+        public async Task<IActionResult> AddMeal(CreateMealDto dto, int userId = 1)
         {
-            //var recipe = await _context.Recipe
-            //    .FirstOrDefaultAsync(r => r.Id == recipeId);
-
-            //if (recipe == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var meal = new Meal
-            //{
-            //    RecipeId = recipeId,
-            //    Date = mealDate,
-            //    Type = mealType,
-            //    Cooked = false
-            //};
-
-            //_context.Meal.Add(meal);
-
-            await _mealPlanService.CreateMealAsnyc(recipeId, mealDate, mealType, userId);
+            await _mealPlanService.CreateMealAsync(dto, userId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -99,35 +77,21 @@ namespace Source.Controllers
         }
 
         // GET: MEALS/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteMeal(int mealId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var meal = await _context.Meal
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (meal == null)
-            {
-                return NotFound();
-            }
-
-            return View(meal);
+            await _mealPlanService.DeleteMealAsync(mealId);
+            
+            return RedirectToAction(nameof(Index));
         }
 
-        // POST: MEALS/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int? id)
+        public async Task<IActionResult> DeleteQueuedMeal(int itemId, int userId = 1)
         {
-            var meal = await _context.Meal.FindAsync(id);
-            if (meal != null)
-            {
-                _context.Meal.Remove(meal);
-            }
+            await _mealPlanService.DeleteMealFromQueueAsync(itemId, userId);
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

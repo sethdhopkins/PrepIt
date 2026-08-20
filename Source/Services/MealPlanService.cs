@@ -1,32 +1,61 @@
-﻿using Source.Models.MealPlanning;
+﻿using Microsoft.EntityFrameworkCore;
+using Source.Models.MealPlanning;
+using Source.Models.Recipes;
 
 namespace Source.Services
 {
     public class MealPlanService : IMealPlanService
     {
-        public async Task CreateMeal(int recipeId, DateTime mealDate, Meal.MealType mealType)
+        private readonly SourceContext _context;
+
+        public MealPlanService(SourceContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public async Task AddMealToPlanAsync(Meal meal)
+        private async Task<MealPlan> CreateMealPlanAsync(int userId, DateOnly startDate)
         {
-            throw new NotImplementedException();
+            var mealPlan = new MealPlan
+            {
+                StartDate = startDate,
+                EndDate = startDate.AddDays(6),
+                UserId = userId,
+            };
+
+            _context.MealPlan.Add(mealPlan);
+
+            await _context.SaveChangesAsync();
+
+            return mealPlan;
         }
 
-        public Task CreateMealAsnyc(int recipId, DateTime mealDate, Meal.MealType mealType, int userId)
+        public async Task CreateMealAsync(CreateMealDto dto, int userId)
         {
-            throw new NotImplementedException();
-        }
+            var mealPlan = await _context.MealPlan
+                .FirstOrDefaultAsync(p =>
+                p.UserId == userId &&
+                p.StartDate <= (dto.MealDate) &&
+                p.EndDate >= (dto.MealDate));
 
-        public Task CreateMealPlanAsync(Meal meal)
-        {
-            throw new NotImplementedException();
-        }
+            if (mealPlan == null)
+            {
+                var startDate = dto.MealDate.AddDays(-(int)dto.MealDate.DayOfWeek);
+                mealPlan = await CreateMealPlanAsync(userId, startDate);
+            }
 
-        public Task GetMealPlan(Meal meal)
-        {
-            throw new NotImplementedException();
+            await DeleteMealFromQueueAsync(dto.Id, userId);
+
+            var meal = new Meal
+            {
+                RecipeId = dto.RecipeId,
+                Date = dto.MealDate,
+                Type = dto.Type,
+                MealPlanId = mealPlan.Id,
+            };
+
+            _context.Meal.Add(meal);
+            await _context.SaveChangesAsync();
+
         }
 
         public Task RemoveMealFromPlanAsync(Meal meal)
@@ -34,24 +63,75 @@ namespace Source.Services
             throw new NotImplementedException();
         }
 
-        public Task DeleteMealAsync(Meal meal)
+        public async Task DeleteMealAsync(int mealId)
         {
-            throw new NotImplementedException();
+            var meal = await _context.Meal.FindAsync(mealId);
+            if (meal != null)
+            {
+                _context.Meal.Remove(meal);
+            }
+
+            await _context.SaveChangesAsync();
+
         }
 
-        public Task RemoveMealFromQueueAsync(Meal meal)
+        public async Task DeleteMealFromQueueAsync(int queueItemId, int userId)
         {
-            throw new NotImplementedException();
+            var queueItem = await _context.RecipeQueueItems
+                .FirstOrDefaultAsync(qi =>
+                qi.Id == queueItemId &&
+                qi.RecipeQueue.UserId == userId);
+
+
+            if (queueItem != null)
+            {
+                _context.RecipeQueueItems.Remove(queueItem);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteMealFromQueueAsync(Meal meal)
+        public async Task<MealPlanDto?> GetMealPlanAsync(int userId, DateOnly startDate)
         {
-            throw new NotImplementedException();
+            return await _context.MealPlan
+                .Where(p =>
+                    p.UserId == userId &&
+                    p.StartDate == startDate)
+                        .Select(p => new MealPlanDto
+                        {
+                            Id = p.Id,
+                            StartDate = p.StartDate,
+                            EndDate = p.EndDate,
+                            Meals = p.Meals
+                                .Select(m => new MealDto
+                                {
+                                    Id = m.Id,
+                                    Name = m.Recipe.Name,
+                                    Image = m.Recipe.Image,
+                                    RecipeId = m.RecipeId,
+                                    MealDate = m.Date,
+                                    Type = m.Type,
+                                    Cooked = m.Cooked
+                                })
+                                .ToList()
+                        })
+                .FirstOrDefaultAsync();
         }
 
-        Task<MealPlan> IMealPlanService.GetMealPlan(Meal meal)
+        public async Task<IEnumerable<QueueItemDto>> GetQueueItemsAsync(int userId)
         {
-            throw new NotImplementedException();
+            return await _context.RecipeQueue
+                .Where(q => q.UserId == userId)
+                .SelectMany(q => q.RecipeQueueItems)
+                .OrderBy(qi => qi.TimeAdded)
+                .Select(qi => new QueueItemDto
+                {
+                    Id = qi.Id,
+                    RecipeId = qi.RecipeId,
+                    Name = qi.Recipe.Name,
+                    Image = qi.Recipe.Image
+                })
+                .ToListAsync();
         }
     }
 }

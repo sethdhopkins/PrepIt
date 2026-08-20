@@ -3,8 +3,9 @@ using Source.Models.Recipes;
 
 public class RecipeQueueViewModel
 {
-    public MealPlan Plan { get; set; } = null!;
-    public IEnumerable<Recipe> Recipes { get; set; } = null!;
+    public MealPlanDto? Plan { get; set; } = null!;
+    public IEnumerable<QueueItemDto> Queue { get; set; } = null!;
+    public string? QueueMessage { get; set; }
 
     public int CurrentPage { get; set; }
     public int TotalPages { get; set; }
