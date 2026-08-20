@@ -12,7 +12,6 @@ C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Azure.Core.dll
 C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Azure.Identity.dll
 C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Humanizer.dll
 C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Microsoft.Bcl.AsyncInterfaces.dll
-C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Microsoft.Bcl.Cryptography.dll
 C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Microsoft.Build.Framework.dll
 C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Microsoft.CodeAnalysis.dll
 C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -149,7 +148,6 @@ C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\rjsmcshtml.dswa.cach
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\scopedcss\bundle\Source.styles.css
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\scopedcss\projectbundle\Source.bundle.scp.css
-C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\compressed\nj5vl8uenh-{0}-koohhdj6va-koohhdj6va.gz
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\compressed\7vtkj46kfl-{0}-6cdlsgpy3y-6cdlsgpy3y.gz
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\compressed\gqmbbydpey-{0}-a62otzx8an-a62otzx8an.gz
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\compressed\ce2suxiu1l-{0}-61n19gt1b8-61n19gt1b8.gz
@@ -227,3 +225,12 @@ C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\refint\Source.dll
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\Source.pdb
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\Source.genruntimeconfig.cache
 C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\ref\Source.dll
+C:\Users\sethd\source\repos\PrepIt\Source\obj\Debug\net10.0\compressed\nj5vl8uenh-{0}-dwqoxzbo82-dwqoxzbo82.gz
+C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Microsoft.Identity.Client.Broker.dll
+C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\Microsoft.Identity.Client.NativeInterop.dll
+C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\runtimes\linux-x64\native\libmsalruntime.so
+C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\runtimes\osx-arm64\native\msalruntime_arm64.dylib
+C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\runtimes\osx-x64\native\msalruntime.dylib
+C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\runtimes\win-arm64\native\msalruntime_arm64.dll
+C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\runtimes\win-x64\native\msalruntime.dll
+C:\Users\sethd\source\repos\PrepIt\Source\bin\Debug\net10.0\runtimes\win-x86\native\msalruntime_x86.dll

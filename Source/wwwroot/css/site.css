@@ -30,7 +30,34 @@ body {
   text-align: start;
 }
 
-.recipe-planner-footer {
+.meal-planner-footer {
     max-height: 30vh;
     overflow-y: auto;
+}
+
+.recipe-queue-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+}
+
+.recipe-queue-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+}
+
+.recipe-queue-item {
+    flex: 0 0 clamp(140px, 15vw, 200px);
+}
+
+.meal-planner-page{
+    padding-bottom: 320px;
+}
+
+.meal-planner-day-section {
+    border: 3px solid black;
+}
+.section-card {
+    border: 2px solid black;
 }
